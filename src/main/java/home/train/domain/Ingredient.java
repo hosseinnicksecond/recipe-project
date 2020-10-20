@@ -2,6 +2,7 @@ package home.train.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Entity
 public class Ingredient {
@@ -12,6 +13,8 @@ public class Ingredient {
     private BigDecimal amount;
     @ManyToOne
     private Recipe recipe;
+    @OneToOne
+    private Measure measures;
 
     public Long getId() {
         return id;
@@ -43,5 +46,13 @@ public class Ingredient {
 
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
+    }
+
+    public Measure getMeasures() {
+        return measures;
+    }
+
+    public void setMeasures(Measure measures) {
+        this.measures = measures;
     }
 }
