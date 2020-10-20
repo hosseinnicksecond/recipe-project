@@ -15,9 +15,11 @@ public class Recipe {
     private String source;
     private String url;
     private String direction;
-    private Byte[] image;
-    @OneToOne(mappedBy = "note",cascade = CascadeType.ALL)
     @Lob
+    private Byte[] image;
+    @Enumerated(value = EnumType.STRING)
+    private Difficulty difficulty;
+    @OneToOne(mappedBy = "note",cascade = CascadeType.ALL)
     private Note note;
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "recipe")
     private Set<Ingredient> ingredients;
