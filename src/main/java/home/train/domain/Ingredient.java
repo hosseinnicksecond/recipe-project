@@ -55,4 +55,14 @@ public class Ingredient {
     public void setMeasures(Measure measures) {
         this.measures = measures;
     }
+
+    @Override
+    public String toString() {
+        return "Ingredient{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", amount=" + amount +
+                ", measures=" + measures +
+                '}';
+    }
 }

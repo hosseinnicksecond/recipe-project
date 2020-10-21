@@ -1,6 +1,7 @@
 package home.train.domain;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.Set;
 
 @Entity
@@ -132,5 +133,24 @@ public class Recipe {
 
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
+    }
+
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", prepTime=" + prepTime +
+                ", cookTime=" + cookTime +
+                ", servings=" + servings +
+                ", source='" + source + '\'' +
+                ", url='" + url + '\'' +
+                ", direction='" + direction + '\'' +
+                ", image=" + Arrays.toString(image) +
+                ", difficulty=" + difficulty +
+                ", note=" + note +
+                ", ingredients=" + ingredients +
+                ", categories=" + categories +
+                '}';
     }
 }
