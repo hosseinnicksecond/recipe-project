@@ -2,6 +2,7 @@ package home.train.domain;
 
 import javax.persistence.*;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -15,6 +16,7 @@ public class Recipe {
     private Integer servings;
     private String source;
     private String url;
+    @Lob
     private String direction;
     @Lob
     private Byte[] image;
@@ -23,13 +25,13 @@ public class Recipe {
     @OneToOne(cascade = CascadeType.ALL)
     private Note note;
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "recipe")
-    private Set<Ingredient> ingredients;
-    @ManyToMany
+    private Set<Ingredient> ingredients=new HashSet<>();
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable( name = "recipe_categories",
             joinColumns = @JoinColumn(name = "recipe_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
-    private Set<Category> categories;
+    private Set<Category> categories=new HashSet<>();
 
     public Long getId() {
         return id;
@@ -108,7 +110,14 @@ public class Recipe {
     }
 
     public void setNote(Note note) {
+
         this.note = note;
+
+    }
+
+    public void addIngredient(Ingredient ingredient){
+        this.ingredients.add(ingredient);
+        ingredient.setRecipe(this);
     }
 
     public Set<Ingredient> getIngredients() {
@@ -125,6 +134,11 @@ public class Recipe {
 
     public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
+    }
+
+    public void addCategory(Category category){
+        this.categories.add(category);
+        category.getRecipes().add(this);
     }
 
     public Set<Category> getCategories() {

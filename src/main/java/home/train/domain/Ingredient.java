@@ -23,6 +23,12 @@ public class Ingredient {
         this.recipe=recipe;
     }
 
+    public Ingredient(String description, BigDecimal amount, Measure measures) {
+        this.description = description;
+        this.amount = amount;
+        this.measures = measures;
+    }
+
     public Long getId() {
         return id;
     }

@@ -9,22 +9,14 @@
        <thead>
        <tr>
            <th>Description</th>
-           <th>Prep Time</th>
-           <th>Cook Time</th>
-           <th>Serving</th>
-           <th>URL</th>
-           <th>Difficulty</th>
+           <th>Direction</th>
            <th>Note</th>
        </tr>
        </thead>
        <tbody>
            <tr th:each="recipe : ${recipes}" >
                <td th:text="${recipe.description}"></td>
-               <td th:text="${recipe.prepTime}"></td>
-               <td th:text="${recipe.cookTime}"></td>
-               <td th:text="${recipe.servings}"></td>
-               <td th:text="${recipe.url}"></td>
-               <td th:text="${recipe.difficulty}"></td>
+               <td th:text="${recipe.direction}"></td>
                <td th:text="${recipe.note}"></td>
            </tr>
        </tbody>
