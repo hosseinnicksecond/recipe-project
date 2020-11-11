@@ -2,11 +2,11 @@ package home.train.Service;
 
 import home.train.domain.Recipe;
 
-import java.util.List;
+import java.util.Set;
 
 public interface RecipeService {
 
-    List<Recipe> findAll();
+    Set<Recipe> findAll();
     Recipe findById(Long id);
     void deleteRecipeById(Long id);
     void deleteByName(Recipe recipe);

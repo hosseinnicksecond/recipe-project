@@ -4,8 +4,8 @@ import home.train.domain.Recipe;
 import home.train.repository.RecipeRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class RecipeServiceImpl implements RecipeService{
@@ -17,8 +17,8 @@ public class RecipeServiceImpl implements RecipeService{
     }
 
     @Override
-    public List<Recipe> findAll() {
-        List<Recipe> recipes=new ArrayList<>();
+    public Set<Recipe> findAll() {
+        Set<Recipe> recipes=new HashSet<>();
         recipeRepository.findAll().forEach(c-> recipes.add(c));
         return recipes;
     }
