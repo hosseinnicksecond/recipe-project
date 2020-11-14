@@ -1,6 +1,7 @@
 package home.train.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.Arrays;
@@ -8,6 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
+@EqualsAndHashCode(exclude = {"categories","note"})
 @Entity
 public class Recipe {
     @Id

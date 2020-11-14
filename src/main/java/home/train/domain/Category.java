@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Data
+@EqualsAndHashCode(exclude = {"recipe"})
 @Entity
 public class Category {
     @Id

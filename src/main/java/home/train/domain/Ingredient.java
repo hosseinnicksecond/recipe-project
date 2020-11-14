@@ -1,11 +1,12 @@
 package home.train.domain;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Data
+@EqualsAndHashCode(exclude = {"recipe"})
 @Entity
 public class Ingredient {
     @Id
@@ -18,11 +19,11 @@ public class Ingredient {
     @OneToOne
     private Measure measures;
 
-    public Ingredient(String description, BigDecimal amount, Measure measures,Recipe recipe) {
+    public Ingredient(String description, BigDecimal amount , Measure measures, Recipe recipe) {
         this.description = description;
         this.amount = amount;
+        this.recipe = recipe;
         this.measures = measures;
-        this.recipe=recipe;
     }
 
     public Ingredient(String description, BigDecimal amount, Measure measures) {

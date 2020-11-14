@@ -1,9 +1,11 @@
 package home.train.domain;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
+
 @Data
+@EqualsAndHashCode(exclude = {"recipe"})
 @Entity
 public class Note {
 
@@ -16,9 +18,9 @@ public class Note {
     private String recipeNotes;
 
 
-    public void setRecipe(Recipe recipe) {
-
-        this.recipe = recipe;
-        recipe.setNote(this);
-    }
+//    public void setRecipe(Recipe recipe) {
+//
+//        this.recipe = recipe;
+//        recipe.setNote(this);
+//    }
 }

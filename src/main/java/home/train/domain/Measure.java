@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Data
+@EqualsAndHashCode(exclude = {"recipe"})
 @Entity
 public class Measure {
     @Id
