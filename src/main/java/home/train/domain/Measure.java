@@ -1,8 +1,6 @@
 package home.train.domain;
 
-import lombok.*;
-
-import javax.persistence.Entity;
+ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,5 +26,10 @@ public class Measure {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return  description ;
     }
 }

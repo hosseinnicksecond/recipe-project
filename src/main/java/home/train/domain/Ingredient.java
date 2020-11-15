@@ -31,6 +31,9 @@ public class Ingredient {
         this.measures = measures;
     }
 
+    public Ingredient() {
+    }
+
     public Long getId() {
         return id;
     }
@@ -69,5 +72,12 @@ public class Ingredient {
 
     public void setMeasures(Measure measures) {
         this.measures = measures;
+    }
+
+    @Override
+    public String toString() {
+        return description + '\'' +
+                ", amount=" + amount +
+                ", measures=" + measures ;
     }
 }

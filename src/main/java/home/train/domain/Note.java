@@ -41,4 +41,9 @@ public class Note {
         this.recipe = recipe;
         recipe.setNote(this);
     }
+
+    @Override
+    public String toString() {
+        return recipeNotes ;
+    }
 }
