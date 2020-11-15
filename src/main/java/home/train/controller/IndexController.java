@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Optional;
 
-@Controller
+
 public class IndexController {
 
     private final CategoryRepository categoryRepository;
@@ -20,7 +20,6 @@ public class IndexController {
         this.measureRepository = measureRepository;
     }
 
-    @RequestMapping({"","/"})
     public String getIndex(){
 
         Optional<Category> getCategoryId=categoryRepository.findByDescription("Italian");

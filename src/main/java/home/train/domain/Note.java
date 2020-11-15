@@ -4,8 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Data
-@EqualsAndHashCode(exclude = {"recipe"})
+
 @Entity
 public class Note {
 
@@ -17,10 +16,29 @@ public class Note {
     @Lob
     private String recipeNotes;
 
+    public Long getId() {
+        return id;
+    }
 
-//    public void setRecipe(Recipe recipe) {
-//
-//        this.recipe = recipe;
-//        recipe.setNote(this);
-//    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Recipe getRecipe() {
+        return recipe;
+    }
+
+    public String getRecipeNotes() {
+        return recipeNotes;
+    }
+
+    public void setRecipeNotes(String recipeNotes) {
+        this.recipeNotes = recipeNotes;
+    }
+
+    public void setRecipe(Recipe recipe) {
+
+        this.recipe = recipe;
+        recipe.setNote(this);
+    }
 }
