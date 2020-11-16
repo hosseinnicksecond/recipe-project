@@ -1,19 +1,29 @@
 package home.train.Service;
 
+import home.train.commands.RecipeCommand;
+import home.train.convertors.RecipeCommandToRecipe;
+import home.train.convertors.RecipeToRecipeCommand;
 import home.train.domain.Recipe;
 import home.train.repository.RecipeRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+@Slf4j
 @Service
 public class RecipeServiceImpl implements RecipeService{
 
+    private final RecipeToRecipeCommand recipeToRecipeCommand;
+    private final RecipeCommandToRecipe recipeCommandToRecipe;
     private final RecipeRepository recipeRepository;
 
-    public RecipeServiceImpl(RecipeRepository recipeRepository) {
+    public RecipeServiceImpl(RecipeToRecipeCommand recipeToRecipeCommand,
+                             RecipeCommandToRecipe recipeCommandToRecipe, RecipeRepository recipeRepository) {
+        this.recipeToRecipeCommand = recipeToRecipeCommand;
+        this.recipeCommandToRecipe = recipeCommandToRecipe;
         this.recipeRepository = recipeRepository;
     }
 
@@ -44,8 +54,12 @@ public class RecipeServiceImpl implements RecipeService{
     }
 
     @Override
-    public Recipe save(Recipe recipe) {
-        return recipeRepository.save(recipe);
+    public RecipeCommand save(RecipeCommand command) {
+
+        Recipe recipe= recipeCommandToRecipe.convert(command);
+        Recipe savedRecipe=recipeRepository.save(recipe);
+        log.info("saved recipe id {}",savedRecipe.getId());
+        return recipeToRecipeCommand.convert(savedRecipe);
     }
 
     @Override
