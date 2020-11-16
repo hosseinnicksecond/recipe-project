@@ -7,6 +7,7 @@ import home.train.domain.Recipe;
 import home.train.repository.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -35,6 +36,12 @@ public class RecipeServiceImpl implements RecipeService{
     }
 
     @Override
+    @Transactional
+    public RecipeCommand findByIdCommand(Long id) {
+        return recipeToRecipeCommand.convert(findById(id));
+    }
+
+    @Override
     public Recipe findById(Long id) {
         Optional<Recipe> recipe=recipeRepository.findById(id);
         if(!recipe.isPresent()){
@@ -54,6 +61,7 @@ public class RecipeServiceImpl implements RecipeService{
     }
 
     @Override
+    @Transactional
     public RecipeCommand save(RecipeCommand command) {
 
         Recipe recipe= recipeCommandToRecipe.convert(command);

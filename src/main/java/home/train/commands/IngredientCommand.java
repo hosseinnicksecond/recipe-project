@@ -1,6 +1,5 @@
 package home.train.commands;
 
-import home.train.domain.Measure;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
