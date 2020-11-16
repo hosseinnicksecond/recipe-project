@@ -1,11 +1,11 @@
 package home.train.controller;
 
 import home.train.Service.RecipeService;
+import home.train.commands.RecipeCommand;
 import home.train.domain.Recipe;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class RecipeController {
@@ -27,5 +27,17 @@ public class RecipeController {
         Recipe recipe=recipeService.findById(Long.valueOf(id));
         model.addAttribute("recipe",recipe);
         return "recipe/show";
+    }
+
+    @GetMapping("/recipe/new")
+    public String getFormView(Model model){
+        model.addAttribute("recipe",new RecipeCommand());
+        return "recipe/recipeForm";
+    }
+
+    @PostMapping("/recipe/add")
+    public String processForm(@ModelAttribute("recipe") RecipeCommand recipeCommand){
+        RecipeCommand saved = recipeService.save(recipeCommand);
+        return "redirect:/recipe/show/"+saved.getId();
     }
 }
