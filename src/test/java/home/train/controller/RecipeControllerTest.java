@@ -11,6 +11,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -105,7 +106,7 @@ class RecipeControllerTest {
 
         given(service.save(any())).willReturn(command);
 
-        mockMvc.perform(post("/recipe/add"))
+        mockMvc.perform(post("/recipe/add").contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(view().name("redirect:/recipe/2/show/"))
                 .andExpect(status().is3xxRedirection());
     }

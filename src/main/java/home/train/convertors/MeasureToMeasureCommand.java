@@ -14,12 +14,13 @@ public class MeasureToMeasureCommand implements Converter<Measure, MeasureComman
     @Nullable
     @Override
     public MeasureCommand convert(Measure measure) {
-        if(measure==null) return null;
+        if(measure!=null) {
 
-        final MeasureCommand measureCommand= new MeasureCommand();
-        measureCommand.setId(measure.getId());
-        measureCommand.setDescription(measure.getDescription());
-
-        return measureCommand;
+            final MeasureCommand measureCommand = new MeasureCommand();
+            measureCommand.setId(measure.getId());
+            measureCommand.setDescription(measure.getDescription());
+            return measureCommand;
+        }
+        return null;
     }
 }
