@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.only;
 
 @ExtendWith(MockitoExtension.class)
 class IngredientServiceImplTest {
@@ -85,34 +86,58 @@ class IngredientServiceImplTest {
     @Test
 
     void saveIngredient() {
-
-        IngredientCommand command= new IngredientCommand();
-        command.setId(3L);
-        command.setRecipeId(2L);
-        command.setDescription("dada");
-
         Measure measure= new Measure();
         measure.setId(1L);
         measure.setDescription("cup");
 
+        Ingredient ingredient1= new Ingredient();
+        ingredient1.setId(3L);
+        ingredient1.setDescription("dada");
+
         Ingredient ingredient= new Ingredient();
         ingredient.setId(3L);
+        ingredient.setMeasures(measure);
         ingredient.setDescription("dodo");
-//        ingredient.setMeasures(measure);
+
+        Recipe savedRecipe= new Recipe();
+        savedRecipe.setId(2L);
+        savedRecipe.addIngredient(ingredient);
+
+
+        ingredient1.setMeasures(measure);
+
+        Optional<Measure> measureOptional=Optional.of(measure);
+
         Recipe recipe= new Recipe();
         recipe.setId(2L);
-        recipe.addIngredient(ingredient);
+        recipe.addIngredient(ingredient1);
+        ingredient1.setRecipe(recipe);
 
-        Optional<Recipe> optionalRecipe= Optional.of(new Recipe());
+        IngredientCommand command=ingredientToIngredientCommand.convert(ingredient);
+        Optional<Recipe> optionalRecipe=Optional.of(recipe);
 
         given(recipeRepository.findById(anyLong())).willReturn(optionalRecipe);
-        given(recipeRepository.save(any())).willReturn(recipe);
+        given(measureRepository.findById(anyLong())).willReturn(measureOptional);
+        given(recipeRepository.save(any())).willReturn(savedRecipe);
 
-        IngredientCommand saved=service.saveIngredient(command);
+        IngredientCommand command1=service.saveIngredient(command);
 
-        assertEquals(3L,saved.getId());
+        assertEquals("dodo",command1.getDescription());
 
+    }
 
+    @Test
+    void ingredientDelete() {
+        Recipe recipe= new Recipe();
+        recipe.setId(1L);
+        Ingredient ingredient=new Ingredient();
+        ingredient.setId(1L);
+        recipe.addIngredient(ingredient);
 
+        given(recipeRepository.findById(anyLong())).willReturn(Optional.of(recipe));
+
+        service.deleteIngredient(ingredientToIngredientCommand.convert(ingredient));
+
+        assertEquals(0,recipe.getIngredients().size());
     }
 }

@@ -31,7 +31,7 @@ public class RecipeServiceImpl implements RecipeService{
     @Override
     public Set<Recipe> findAll() {
         Set<Recipe> recipes=new HashSet<>();
-        recipeRepository.findAll().forEach(c-> recipes.add(c));
+        recipeRepository.findAll().forEach(recipes::add);
         return recipes;
     }
 
@@ -44,7 +44,7 @@ public class RecipeServiceImpl implements RecipeService{
     @Override
     public Recipe findById(Long id) {
         Optional<Recipe> recipe=recipeRepository.findById(id);
-        if(!recipe.isPresent()){
+        if(recipe.isEmpty()){
             throw new RuntimeException("Recipe Not Found");
         }
         return recipe.get();

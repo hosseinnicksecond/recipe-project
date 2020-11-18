@@ -65,10 +65,14 @@
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label>Difficulty:</label>
-                                    <select class="form-control">
-                                        <option>Easy</option>
-                                        <option>Medium</option>
-                                        <option>Hard</option>
+                                    <select class="form-control" th:field="*{difficulty}">
+                                        <option th:remove="All">Easy</option>
+                                        <option th:remove="All">Medium</option>
+                                        <option th:remove="All">Hard</option>
+                                        <option th:each="difficulty: ${T(home.train.domain.Category).values()}"
+                                                th:value="${difficulty.name}"
+                                                th:text="${difficulty.name}"
+                                        >Kind of hard</option>
                                     </select>
                                 </div>
                             </div>

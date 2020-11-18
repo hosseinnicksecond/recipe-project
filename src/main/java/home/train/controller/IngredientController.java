@@ -30,7 +30,7 @@ public class IngredientController {
 
     @GetMapping("/recipe/{id}/ingredient")
     public String showIngredient(@PathVariable(name = "id")String id, Model model){
-        log.info("id for show ingredient is {}",id);
+        log.info("id for show recipe is {}",id);
         model.addAttribute("recipe", recipeService.findByIdCommand(Long.valueOf(id)));
         return "recipe/ingredient/list";
     }
@@ -80,6 +80,18 @@ public class IngredientController {
 
 
         return "recipe/ingredient/ingredientForm";
+    }
+
+    @GetMapping("/recipe/{recipeId}/ingredient/{ingredientId}/delete")
+    public String deleteIngredient(@PathVariable(value = "recipeId") String RecipeId,
+                                   @PathVariable(value = "ingredientId") String ingredientId){
+
+        log.info("from delete ingredient recipeId->{} ingredientId->{}",RecipeId,ingredientId);
+
+        IngredientCommand deletedIngredient=ingredientService.findByRecipeIdAndIngredientId(Long.valueOf(RecipeId),Long.valueOf(ingredientId));
+        ingredientService.deleteIngredient(deletedIngredient);
+
+        return "redirect:/recipe/"+RecipeId+"/ingredient";
     }
 
     @PostMapping("recipe/{recipeId}/ingredient")

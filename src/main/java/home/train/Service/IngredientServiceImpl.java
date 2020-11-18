@@ -1,7 +1,7 @@
 package home.train.Service;
 
 import home.train.commands.IngredientCommand;
-import home.train.commands.MeasureCommand;
+import home.train.commands.RecipeCommand;
 import home.train.convertors.IngredientCommandToIngredient;
 import home.train.convertors.IngredientToIngredientCommand;
 import home.train.domain.Ingredient;
@@ -10,8 +10,8 @@ import home.train.repository.MeasureRepository;
 import home.train.repository.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 @Slf4j
@@ -53,6 +53,7 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
+    @Transactional
     public IngredientCommand saveIngredient(IngredientCommand command) {
 
         Optional<Recipe> recipeOptional = recipeRepository.findById(command.getRecipeId());
@@ -96,5 +97,27 @@ public class IngredientServiceImpl implements IngredientService {
 
             return ingredientToIngredientCommand.convert(optionalIngredient.get());
         }
+    }
+
+    @Override
+    @Transactional
+    public void deleteIngredient(IngredientCommand command) {
+       Optional<Recipe> optionalRecipe=recipeRepository.findById(command.getRecipeId());
+
+       if (optionalRecipe.isPresent()){
+           Recipe recipe=optionalRecipe.get();
+           Optional<Ingredient> foundIngredient=recipe.getIngredients().stream()
+                   .filter(ingredient -> ingredient.getRecipe().getId().equals(command.getRecipeId()))
+                   .filter(ingredient -> ingredient.getId().equals(command.getId()))
+                   .findFirst();
+           if(foundIngredient.isPresent()) {
+               Ingredient ingredient=foundIngredient.get();
+               ingredient.setRecipe(null);
+               recipe.getIngredients().remove(ingredient);
+               Recipe savedRecipe = recipeRepository.save(recipe);
+           }
+       }else {
+           log.info("can not find recipe by id-> {}",command.getRecipeId());
+       }
     }
 }
