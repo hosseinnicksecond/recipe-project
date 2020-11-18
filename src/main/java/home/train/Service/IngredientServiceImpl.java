@@ -55,32 +55,46 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     public IngredientCommand saveIngredient(IngredientCommand command) {
 
-      Optional<Recipe> recipeOptional=recipeRepository.findById(command.getRecipeId());
+        Optional<Recipe> recipeOptional = recipeRepository.findById(command.getRecipeId());
 
-      if(recipeOptional.isEmpty()){
-          log.info("recipe with {} id not found",command.getRecipeId());
-          return new IngredientCommand();
-      }else {
-          Recipe recipe=recipeOptional.get();
+        if (recipeOptional.isEmpty()) {
+            log.info("recipe with {} id not found", command.getRecipeId());
+            return new IngredientCommand();
+        } else {
+            Recipe recipe = recipeOptional.get();
 
-          Optional<Ingredient> ingredientOptional= recipe.getIngredients().stream()
-                  .filter(ingredient -> ingredient.getId().equals(command.getId()))
-                  .findFirst();
-          if(ingredientOptional.isPresent()){
-              Ingredient ingredient=ingredientOptional.get();
-              ingredient.setDescription(command.getDescription());
-              ingredient.setAmount(command.getAmount());
-              ingredient.setMeasures(measureRepository.findById(command.getMeasure()
-                      .getId()).orElseThrow(()->new RuntimeException("Measure Not Found")));
-          }else {
-              recipe.addIngredient(ingredientCommandToIngredient.convert(command));
-          }
+            Optional<Ingredient> ingredientOptional = recipe.getIngredients().stream()
+                    .filter(ingredient -> ingredient.getId().equals(command.getId()))
+                    .findFirst();
+            if (ingredientOptional.isPresent()) {
+                Ingredient ingredient = ingredientOptional.get();
+                ingredient.setDescription(command.getDescription());
+                ingredient.setAmount(command.getAmount());
+                ingredient.setMeasures(measureRepository.findById(command.getMeasure()
+                        .getId()).orElseThrow(() -> new RuntimeException("Measure Not Found")));
+            } else {
 
-          Recipe savedRecipe=recipeRepository.save(recipe);
+                Ingredient ingredient = ingredientCommandToIngredient.convert(command);
+                assert ingredient != null;
+                ingredient.setRecipe(recipe);
+                recipe.addIngredient(ingredient);
+            }
 
-          return ingredientToIngredientCommand.convert(savedRecipe.getIngredients().stream()
-                 .filter(ingredient -> ingredient.getId().equals(command.getId()))
-                  .findFirst().get());
-      }
+            Recipe savedRecipe = recipeRepository.save(recipe);
+
+            Optional<Ingredient> optionalIngredient = savedRecipe.getIngredients().stream()
+                    .filter(in -> in.getId().equals(command.getId()))
+                    .findFirst();
+
+            if (optionalIngredient.isEmpty()) {
+                optionalIngredient = recipe.getIngredients().stream()
+                        .filter(i -> i.getDescription().equalsIgnoreCase(command.getDescription()))
+                        .filter(i -> i.getAmount().equals(command.getAmount()))
+                        .filter(i -> i.getMeasures().getId().equals(command.getMeasure().getId()))
+                        .findFirst();
+            }
+
+            return ingredientToIngredientCommand.convert(optionalIngredient.get());
+        }
     }
 }
