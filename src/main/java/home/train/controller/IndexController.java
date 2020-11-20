@@ -4,8 +4,6 @@ import home.train.domain.Category;
 import home.train.domain.Measure;
 import home.train.repository.CategoryRepository;
 import home.train.repository.MeasureRepository;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Optional;
 

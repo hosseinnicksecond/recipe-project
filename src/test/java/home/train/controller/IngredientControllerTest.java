@@ -100,7 +100,7 @@ class IngredientControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/ingredient/ingredientForm"))
                 .andExpect(model().attributeExists("ingredient"))
-                .andExpect(model().attributeExists("uomList"));
+                .andExpect(model().attributeExists("measureList"));
 
         then(ingredientService).should().findByRecipeIdAndIngredientId(1L, 2L);
         then(measureService).should().findAll();
