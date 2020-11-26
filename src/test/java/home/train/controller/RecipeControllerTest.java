@@ -3,6 +3,7 @@ package home.train.controller;
 import home.train.Service.RecipeService;
 import home.train.commands.RecipeCommand;
 import home.train.domain.Recipe;
+import home.train.exception.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -66,6 +67,14 @@ class RecipeControllerTest {
         then(service).should().findAll();
         then(model).should().addAttribute(eq("recipes"),setArgumentCaptor.capture());
         assertThat(2).isEqualTo(setArgumentCaptor.getValue().size());
+    }
+    @Test
+    void NotFoundExceptionHandle() throws Exception {
+        given(service.findById(anyLong())).willThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/recipe/{recipeId}/show",1))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("404error"));
     }
 
     @Test

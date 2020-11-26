@@ -3,10 +3,15 @@ package home.train.controller;
 import home.train.Service.RecipeService;
 import home.train.commands.RecipeCommand;
 import home.train.domain.Recipe;
+import home.train.exception.NotFoundException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+@Slf4j
 @Controller
 public class RecipeController {
 
@@ -52,5 +57,14 @@ public class RecipeController {
     public String deleteRecipe(@PathVariable(name = "id")String id){
         recipeService.deleteRecipeById(Long.valueOf(id));
         return "redirect:/recipe";
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFoundException.class)
+    public ModelAndView exceptionPage(){
+        log.error("handle Not Found Exception");
+        ModelAndView mv= new ModelAndView();
+        mv.setViewName("404error");
+        return mv;
     }
 }
