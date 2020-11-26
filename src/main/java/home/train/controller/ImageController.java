@@ -3,6 +3,7 @@ package home.train.controller;
 import home.train.Service.ImageService;
 import home.train.Service.RecipeService;
 import home.train.commands.RecipeCommand;
+import home.train.exception.ExceptionHandle;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
@@ -34,6 +35,9 @@ public class ImageController {
     public String showForm(@PathVariable(value = "id")String id, Model model){
 
         RecipeCommand command=recipeService.findByIdCommand(Long.valueOf(id));
+        if(command==null){
+            throw new ExceptionHandle("Not found recipe by ID number : "+id);
+        }
 
         model.addAttribute("recipe",command);
 
@@ -70,6 +74,6 @@ public class ImageController {
             InputStream is=new ByteArrayInputStream(loadedImage);
             IOUtils.copy(is,response.getOutputStream());
         }
-        log.info("image not found");
+        throw new ExceptionHandle("image not found");
     }
 }

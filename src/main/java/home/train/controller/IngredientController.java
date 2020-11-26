@@ -7,6 +7,7 @@ import home.train.commands.IngredientCommand;
 import home.train.commands.MeasureCommand;
 import home.train.commands.RecipeCommand;
 import home.train.domain.Recipe;
+import home.train.exception.ExceptionHandle;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -88,6 +89,9 @@ public class IngredientController {
         log.info("from delete ingredient recipeId->{} ingredientId->{}", RecipeId, ingredientId);
 
         IngredientCommand deletedIngredient = ingredientService.findByRecipeIdAndIngredientId(Long.valueOf(RecipeId), Long.valueOf(ingredientId));
+        if(deletedIngredient==null){
+            throw  new ExceptionHandle("Not Found Recipe By ID Number : "+RecipeId);
+        }
         ingredientService.deleteIngredient(deletedIngredient);
 
         return "redirect:/recipe/" + RecipeId + "/ingredient";

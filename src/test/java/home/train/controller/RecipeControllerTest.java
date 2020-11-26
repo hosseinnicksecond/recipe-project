@@ -49,7 +49,9 @@ class RecipeControllerTest {
 
     @BeforeEach
     void setUp() {
-        mockMvc=MockMvcBuilders.standaloneSetup(controller).build();
+        mockMvc=MockMvcBuilders.standaloneSetup(controller)
+                .setControllerAdvice(new ControllerExceptionHandler())
+                .build();
     }
 
     @Test
@@ -90,9 +92,9 @@ class RecipeControllerTest {
     void IdFormatException() throws Exception {
 //        given(service.findById(anyString())).willThrow(new BadRequest());
 
-        mockMvc.perform(get("/recipe/{id}/show","kol"))
+        mockMvc.perform(get("/recipe/kol/show"))
                 .andExpect(status().isBadRequest())
-                .andExpect(view().name("404error"));
+                .andExpect(view().name("400error"));
     }
 
     @Test
