@@ -4,7 +4,7 @@ import home.train.commands.RecipeCommand;
 import home.train.convertors.RecipeCommandToRecipe;
 import home.train.convertors.RecipeToRecipeCommand;
 import home.train.domain.Recipe;
-import home.train.exception.NotFoundException;
+import home.train.exception.ExceptionHandle;
 import home.train.repository.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -46,7 +46,7 @@ public class RecipeServiceImpl implements RecipeService{
     public Recipe findById(Long id) {
         Optional<Recipe> recipe=recipeRepository.findById(id);
         if(recipe.isEmpty()){
-            throw new NotFoundException("Recipe Not Found with iD number : "+id);
+            throw new ExceptionHandle("Recipe Not Found with iD number : "+id);
         }
         return recipe.get();
     }
@@ -66,6 +66,7 @@ public class RecipeServiceImpl implements RecipeService{
     public RecipeCommand save(RecipeCommand command) {
 
         Recipe recipe= recipeCommandToRecipe.convert(command);
+        assert recipe != null;
         Recipe savedRecipe=recipeRepository.save(recipe);
         log.info("saved recipe id {}",savedRecipe.getId());
         return recipeToRecipeCommand.convert(savedRecipe);

@@ -3,7 +3,7 @@ package home.train.controller;
 import home.train.Service.RecipeService;
 import home.train.commands.RecipeCommand;
 import home.train.domain.Recipe;
-import home.train.exception.NotFoundException;
+import home.train.exception.ExceptionHandle;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -29,7 +29,13 @@ public class RecipeController {
 
     @GetMapping("/recipe/{id}/show")
     public String getById(@PathVariable(name = "id") String id, Model model){
-        Recipe recipe=recipeService.findById(Long.valueOf(id));
+        long ID;
+        try {
+          ID= Long.parseLong(id);
+        }catch (NumberFormatException e){
+            throw new ExceptionHandle(id+" not a Number Format");
+        }
+        Recipe recipe=recipeService.findById(ID);
         model.addAttribute("recipe",recipe);
         return "recipe/show";
     }
@@ -60,7 +66,7 @@ public class RecipeController {
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NotFoundException.class)
+    @ExceptionHandler(ExceptionHandle.class)
     public ModelAndView exceptionPage(Exception exception){
         log.error("handle Not Found Exception");
         ModelAndView mv= new ModelAndView();
@@ -68,4 +74,15 @@ public class RecipeController {
         mv.addObject("exception",exception);
         return mv;
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NumberFormatException.class)
+    public ModelAndView handleBadRequest(Exception exception){
+        log.error(exception.getMessage());
+        ModelAndView mv= new ModelAndView();
+        mv.setViewName("404error");
+        mv.addObject("exception",exception);
+        return mv;
+    }
+
 }

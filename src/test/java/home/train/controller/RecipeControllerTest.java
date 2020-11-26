@@ -3,7 +3,7 @@ package home.train.controller;
 import home.train.Service.RecipeService;
 import home.train.commands.RecipeCommand;
 import home.train.domain.Recipe;
-import home.train.exception.NotFoundException;
+import home.train.exception.ExceptionHandle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 
@@ -70,7 +69,7 @@ class RecipeControllerTest {
     }
     @Test
     void NotFoundExceptionHandle() throws Exception {
-        given(service.findById(anyLong())).willThrow(NotFoundException.class);
+        given(service.findById(anyLong())).willThrow(ExceptionHandle.class);
 
         mockMvc.perform(get("/recipe/{recipeId}/show",1))
                 .andExpect(status().isNotFound())
@@ -85,6 +84,15 @@ class RecipeControllerTest {
         mockMvc.perform(get("/recipe"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipes"));
+    }
+
+    @Test
+    void IdFormatException() throws Exception {
+//        given(service.findById(anyString())).willThrow(new BadRequest());
+
+        mockMvc.perform(get("/recipe/{id}/show","kol"))
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name("404error"));
     }
 
     @Test
