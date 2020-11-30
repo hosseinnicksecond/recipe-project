@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 class RecipeControllerTest {
 
-    @Mock
+    @Mock(lenient = true)
     RecipeService service;
 
     @Mock
@@ -76,6 +76,19 @@ class RecipeControllerTest {
         mockMvc.perform(get("/recipe/{recipeId}/show",1))
                 .andExpect(status().isNotFound())
                 .andExpect(view().name("404error"));
+    }
+
+    @Test
+    void fieldHaveError() throws Exception {
+        RecipeCommand recipeCommand=new RecipeCommand();
+        recipeCommand.setDescription("some");
+        recipeCommand.setId(1L);
+
+        given(service.save(any())).willReturn(recipeCommand);
+
+        mockMvc.perform(post("/recipe/add"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/recipeForm"));
     }
 
     @Test
@@ -122,10 +135,16 @@ class RecipeControllerTest {
 
         RecipeCommand command= new RecipeCommand();
         command.setId(2L);
+        command.setDescription("description");
+        command.setDirection("some direction");
 
         given(service.save(any())).willReturn(command);
 
-        mockMvc.perform(post("/recipe/add").contentType(MediaType.APPLICATION_FORM_URLENCODED))
+        mockMvc.perform(post("/recipe/add")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("id","")
+                .param("description","description")
+                .param("direction","some direct"))
                 .andExpect(view().name("redirect:/recipe/2/show/"))
                 .andExpect(status().is3xxRedirection());
     }
