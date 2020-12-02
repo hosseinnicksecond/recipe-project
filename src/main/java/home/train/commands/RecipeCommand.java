@@ -18,7 +18,7 @@ import java.util.Set;
 public class RecipeCommand {
     private Long id;
     @NotBlank
-    @Size
+    @Size(min = 3 ,max = 255)
     private String description;
 
     @Min(1)
